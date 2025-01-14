@@ -38,28 +38,6 @@ rtc_source_set("enums") {
   sources = [ "enums.h" ]
 }
 
-rtc_library("network_control") {
-  visibility = [ "*" ]
-  sources = [
-    "network_control.h",
-    "network_types.cc",
-    "network_types.h",
-  ]
-
-  deps = [
-    ":ecn_marking",
-    "../../api:field_trials_view",
-    "../../rtc_base/system:rtc_export",
-    "../environment",
-    "../rtc_event_log",
-    "../units:data_rate",
-    "../units:data_size",
-    "../units:time_delta",
-    "../units:timestamp",
-    "//third_party/abseil-cpp/absl/base:core_headers",
-  ]
-}
-
 rtc_library("field_trial_based_config") {
   visibility = [ "*" ]
   sources = [
@@ -82,21 +60,6 @@ rtc_source_set("datagram_transport_interface") {
     "..:priority",
     "..:rtc_error",
     "../../rtc_base:copy_on_write_buffer",
-  ]
-}
-
-rtc_library("goog_cc") {
-  visibility = [ "*" ]
-  sources = [
-    "goog_cc_factory.cc",
-    "goog_cc_factory.h",
-  ]
-  deps = [
-    ":network_control",
-    "..:network_state_predictor_api",
-    "../../api/units:time_delta",
-    "../../modules/congestion_controller/goog_cc",
-    "../../rtc_base/system:rtc_export",
   ]
 }
 

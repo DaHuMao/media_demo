@@ -18,7 +18,6 @@
 #include "api/array_view.h"
 #include "api/audio/audio_view.h"
 #include "api/audio/channel_layout.h"
-#include "api/rtp_packet_infos.h"
 #include "rtc_base/checks.h"
 #include "rtc_base/time_utils.h"
 
@@ -61,7 +60,6 @@ void AudioFrame::ResetWithoutMuting() {
   speech_type_ = kUndefined;
   vad_activity_ = kVadUnknown;
   profile_timestamp_ms_ = 0;
-  packet_infos_ = RtpPacketInfos();
   absolute_capture_timestamp_ms_ = std::nullopt;
 }
 
@@ -111,7 +109,6 @@ void AudioFrame::CopyFrom(const AudioFrame& src) {
   timestamp_ = src.timestamp_;
   elapsed_time_ms_ = src.elapsed_time_ms_;
   ntp_time_ms_ = src.ntp_time_ms_;
-  packet_infos_ = src.packet_infos_;
   muted_ = src.muted();
   samples_per_channel_ = src.samples_per_channel_;
   sample_rate_hz_ = src.sample_rate_hz_;
