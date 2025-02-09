@@ -15,7 +15,6 @@
 
 #include "api/array_view.h"
 #include "api/audio/audio_frame.h"
-#include "modules/audio_processing/logging/apm_data_dumper.h"
 #include "rtc_base/checks.h"
 
 namespace webrtc {
@@ -35,17 +34,12 @@ constexpr float kDecayFilterConstant = 0.9971259f;
 }  // namespace
 
 FixedDigitalLevelEstimator::FixedDigitalLevelEstimator(
-    size_t samples_per_channel,
-    ApmDataDumper* apm_data_dumper)
-    : apm_data_dumper_(apm_data_dumper),
-      filter_state_level_(kInitialFilterStateLevel) {
+    size_t samples_per_channel)
+      : filter_state_level_(kInitialFilterStateLevel) {
   SetSamplesPerChannel(samples_per_channel);
   CheckParameterCombination();
-  RTC_DCHECK(apm_data_dumper_);
   // Convert `samples_per_channel` to sample rate for
   // `agc2_level_estimator_samplerate`.
-  apm_data_dumper_->DumpRaw("agc2_level_estimator_samplerate",
-                            samples_per_channel * kDefaultAudioBuffersPerSec);
 }
 
 void FixedDigitalLevelEstimator::CheckParameterCombination() {
@@ -97,14 +91,6 @@ std::array<float, kSubFramesInFrame> FixedDigitalLevelEstimator::ComputeLevel(
     }
     filter_state_level_ = envelope[sub_frame];
 
-    // Dump data for debug.
-    RTC_DCHECK(apm_data_dumper_);
-    const auto channel = float_frame[0];
-    apm_data_dumper_->DumpRaw("agc2_level_estimator_samples",
-                              samples_in_sub_frame_,
-                              &channel[sub_frame * samples_in_sub_frame_]);
-    apm_data_dumper_->DumpRaw("agc2_level_estimator_level",
-                              envelope[sub_frame]);
   }
 
   return envelope;

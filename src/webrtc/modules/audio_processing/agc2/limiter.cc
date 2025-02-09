@@ -17,7 +17,6 @@
 #include "absl/strings/string_view.h"
 #include "api/array_view.h"
 #include "modules/audio_processing/agc2/agc2_common.h"
-#include "modules/audio_processing/logging/apm_data_dumper.h"
 #include "rtc_base/checks.h"
 #include "rtc_base/numerics/safe_conversions.h"
 #include "rtc_base/numerics/safe_minmax.h"
@@ -86,12 +85,11 @@ void ScaleSamples(MonoView<const float> per_sample_scaling_factors,
 }
 }  // namespace
 
-Limiter::Limiter(ApmDataDumper* apm_data_dumper,
+Limiter::Limiter(
                  size_t samples_per_channel,
                  absl::string_view histogram_name)
-    : interp_gain_curve_(apm_data_dumper, histogram_name),
-      level_estimator_(samples_per_channel, apm_data_dumper),
-      apm_data_dumper_(apm_data_dumper) {
+    : interp_gain_curve_(histogram_name),
+      level_estimator_(samples_per_channel, apm_data_dumper) {
   RTC_DCHECK_LE(samples_per_channel, kMaximalNumberOfSamplesPerChannel);
 }
 
@@ -117,13 +115,6 @@ void Limiter::Process(DeinterleavedView<float> signal) {
   ScaleSamples(per_sample_scaling_factors, signal);
 
   last_scaling_factor_ = scaling_factors_.back();
-
-  // Dump data for debug.
-  apm_data_dumper_->DumpRaw("agc2_limiter_last_scaling_factor",
-                            last_scaling_factor_);
-  apm_data_dumper_->DumpRaw(
-      "agc2_limiter_region",
-      static_cast<int>(interp_gain_curve_.get_stats().region));
 }
 
 InterpolatedGainCurve::Stats Limiter::GetGainCurveStats() const {

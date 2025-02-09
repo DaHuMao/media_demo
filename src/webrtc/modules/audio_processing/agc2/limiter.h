@@ -25,8 +25,7 @@ class ApmDataDumper;
 class Limiter {
  public:
   // See `SetSamplesPerChannel()` for valid values for `samples_per_channel`.
-  Limiter(ApmDataDumper* apm_data_dumper,
-          size_t samples_per_channel,
+  Limiter(size_t samples_per_channel,
           absl::string_view histogram_name_prefix);
 
   Limiter(const Limiter& limiter) = delete;
@@ -52,7 +51,6 @@ class Limiter {
  private:
   const InterpolatedGainCurve interp_gain_curve_;
   FixedDigitalLevelEstimator level_estimator_;
-  ApmDataDumper* const apm_data_dumper_ = nullptr;
 
   // Work array containing the sub-frame scaling factors to be interpolated.
   std::array<float, kSubFramesInFrame + 1> scaling_factors_ = {};

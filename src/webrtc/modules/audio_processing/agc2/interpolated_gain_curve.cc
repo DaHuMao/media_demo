@@ -15,7 +15,6 @@
 
 #include "absl/strings/string_view.h"
 #include "modules/audio_processing/agc2/agc2_common.h"
-#include "modules/audio_processing/logging/apm_data_dumper.h"
 #include "rtc_base/checks.h"
 #include "rtc_base/strings/string_builder.h"
 
@@ -31,7 +30,6 @@ constexpr std::array<float, kInterpolatedGainCurveTotalPoints>
     InterpolatedGainCurve::approximation_params_q_;
 
 InterpolatedGainCurve::InterpolatedGainCurve(
-    ApmDataDumper* apm_data_dumper,
     absl::string_view histogram_name_prefix)
     : region_logger_(
           (rtc::StringBuilder("WebRTC.Audio.")
@@ -46,20 +44,10 @@ InterpolatedGainCurve::InterpolatedGainCurve(
           (rtc::StringBuilder("WebRTC.Audio.")
            << histogram_name_prefix
            << ".FixedDigitalGainCurveRegion.Saturation")
-              .str()),
-      apm_data_dumper_(apm_data_dumper) {}
+              .str()) {}
 
 InterpolatedGainCurve::~InterpolatedGainCurve() {
   if (stats_.available) {
-    RTC_DCHECK(apm_data_dumper_);
-    apm_data_dumper_->DumpRaw("agc2_interp_gain_curve_lookups_identity",
-                              stats_.look_ups_identity_region);
-    apm_data_dumper_->DumpRaw("agc2_interp_gain_curve_lookups_knee",
-                              stats_.look_ups_knee_region);
-    apm_data_dumper_->DumpRaw("agc2_interp_gain_curve_lookups_limiter",
-                              stats_.look_ups_limiter_region);
-    apm_data_dumper_->DumpRaw("agc2_interp_gain_curve_lookups_saturation",
-                              stats_.look_ups_saturation_region);
     region_logger_.LogRegionStats(stats_);
   }
 }

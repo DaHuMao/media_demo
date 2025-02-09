@@ -20,8 +20,6 @@
 
 namespace webrtc {
 
-class ApmDataDumper;
-
 constexpr float kInputLevelScalingFactor = 32768.0f;
 
 // Defined as DbfsToLinear(kLimiterMaxInputLevelDbFs)
@@ -59,8 +57,7 @@ class InterpolatedGainCurve {
     int64_t region_duration_frames = 0;
   };
 
-  InterpolatedGainCurve(ApmDataDumper* apm_data_dumper,
-                        absl::string_view histogram_name_prefix);
+  InterpolatedGainCurve(absl::string_view histogram_name_prefix);
   ~InterpolatedGainCurve();
 
   InterpolatedGainCurve(const InterpolatedGainCurve&) = delete;
@@ -97,8 +94,6 @@ class InterpolatedGainCurve {
   } region_logger_;
 
   void UpdateStats(float input_level) const;
-
-  ApmDataDumper* const apm_data_dumper_;
 
   static constexpr std::array<float, kInterpolatedGainCurveTotalPoints>
       approximation_params_x_ = {

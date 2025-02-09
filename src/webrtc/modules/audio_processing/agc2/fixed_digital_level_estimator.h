@@ -34,8 +34,7 @@ class FixedDigitalLevelEstimator {
   // kSubFramesInSample. For kFrameDurationMs=10 and
   // kSubFramesInSample=20, this means that the original sample rate has to be
   // divisible by 2000 and therefore `samples_per_channel` by 20.
-  FixedDigitalLevelEstimator(size_t samples_per_channel,
-                             ApmDataDumper* apm_data_dumper);
+  FixedDigitalLevelEstimator(size_t samples_per_channel);
 
   FixedDigitalLevelEstimator(const FixedDigitalLevelEstimator&) = delete;
   FixedDigitalLevelEstimator& operator=(const FixedDigitalLevelEstimator&) =
@@ -60,7 +59,6 @@ class FixedDigitalLevelEstimator {
  private:
   void CheckParameterCombination();
 
-  ApmDataDumper* const apm_data_dumper_ = nullptr;
   float filter_state_level_;
   int samples_in_frame_;
   int samples_in_sub_frame_;
