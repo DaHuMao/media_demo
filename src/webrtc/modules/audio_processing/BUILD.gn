@@ -1,0 +1,6 @@
+import("../../webrtc.gni")
+rtc_source_set("audio_frame_view") {
+  sources = [ "include/audio_frame_view.h" ]
+  deps = [ "../../api/audio:audio_frame_api" ]
+}
+

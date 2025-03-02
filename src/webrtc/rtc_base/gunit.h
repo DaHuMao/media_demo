@@ -15,7 +15,6 @@
 #include "rtc_base/fake_clock.h"
 #include "rtc_base/logging.h"
 #include "rtc_base/thread.h"
-#include "test/gtest.h"
 
 // Wait until "ex" is true, or "timeout" expires.
 #define WAIT(ex, timeout)                                       \

@@ -89,7 +89,7 @@ Limiter::Limiter(
                  size_t samples_per_channel,
                  absl::string_view histogram_name)
     : interp_gain_curve_(histogram_name),
-      level_estimator_(samples_per_channel, apm_data_dumper) {
+      level_estimator_(samples_per_channel) {
   RTC_DCHECK_LE(samples_per_channel, kMaximalNumberOfSamplesPerChannel);
 }
 

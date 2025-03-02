@@ -199,7 +199,7 @@ rtc_library("event_tracer") {
     ":platform_thread_types",
     ":rtc_event",
     ":timeutils",
-    "..:tracing",
+    #"..:tracing",
     "../api:sequence_checker",
     "synchronization:mutex",
     "system:rtc_export",
@@ -473,6 +473,10 @@ rtc_library("logging") {
   }
 }
 
+config("absl_config") {
+  include_dirs = [ "//third_party/abseil-cpp/" ]
+}
+
 rtc_library("checks") {
   # TODO(bugs.webrtc.org/9607): This should not be public.
   visibility = [ "*" ]
@@ -604,38 +608,11 @@ rtc_library("stringutils") {
   ]
 }
 
-rtc_library("audio_format_to_string") {
-  sources = [
-    "strings/audio_format_to_string.cc",
-    "strings/audio_format_to_string.h",
-  ]
-  deps = [
-    ":stringutils",
-    "../api/audio_codecs:audio_codecs_api",
-  ]
-}
 
 rtc_source_set("type_traits") {
   sources = [ "type_traits.h" ]
 }
 
-rtc_source_set("rtc_operations_chain") {
-  visibility = [ "*" ]
-  sources = [
-    "operations_chain.cc",
-    "operations_chain.h",
-  ]
-  deps = [
-    ":checks",
-    ":macromagic",
-    ":refcount",
-    "../api:make_ref_counted",
-    "../api:refcountedbase",
-    "../api:scoped_refptr",
-    "../api:sequence_checker",
-    "system:no_unique_address",
-  ]
-}
 
 if (is_mac || is_ios) {
   rtc_library("rtc_task_queue_gcd") {
@@ -867,16 +844,16 @@ rtc_library("async_dns_resolver") {
   ]
 }
 
-rtc_library("async_dns_resolver_unittests") {
-  testonly = true
-  sources = [ "async_dns_resolver_unittest.cc" ]
-  deps = [
-    ":async_dns_resolver",
-    ":gunit_helpers",
-    "../test:run_loop",
-    "../test:test_support",
-  ]
-}
+#rtc_library("async_dns_resolver_unittests") {
+#  testonly = true
+#  sources = [ "async_dns_resolver_unittest.cc" ]
+#  deps = [
+#    ":async_dns_resolver",
+#    ":gunit_helpers",
+#    "../test:run_loop",
+#    "../test:test_support",
+#  ]
+#}
 
 rtc_library("ip_address") {
   visibility = [ "*" ]

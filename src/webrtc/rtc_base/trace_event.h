@@ -21,10 +21,6 @@
 #if defined(RTC_USE_PERFETTO)
 #include "rtc_base/trace_categories.h"
 #endif
-#include "third_party/perfetto/include/perfetto/tracing/event_context.h"
-#include "third_party/perfetto/include/perfetto/tracing/track.h"
-#include "third_party/perfetto/include/perfetto/tracing/track_event_args.h"
-// IWYU pragma: end_exports
 
 #if !defined(RTC_USE_PERFETTO)
 #include <string>
