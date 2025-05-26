@@ -1,0 +1,38 @@
+import("//config.gni")
+media_demo_executable("hello_world") {
+  sources = [
+    "audio_device_test.cc",
+  ]
+  deps = [
+    "${work_dir}/core/audio:audio_device",
+    "${work_dir}/core/audio/file:file_io",
+    "${work_dir}/core/audio:audio_frame",
+  ]
+}
+
+media_demo_executable("player_test") {
+  sources = [
+    "player_test.cc",
+    "opengl_test/render.h",
+    "opengl_test/render.cc",
+  ]
+  deps = [
+    "${work_dir}/player",
+    "${webrtc_dir}/api/task_queue:default_task_queue_factory",
+    "${work_dir}/core/audio/file:file_io",
+    "${work_dir}/core/video_render/opengl:glfw_windows",
+    "//third_party/ffmpeg:ffmpeg",
+  ]
+  configs = [
+    "//third_party/glfw:glfw_ldflags_config",
+    "//third_party/glew:glew_config",
+  ]
+}
+
+group("all_examples") {
+  deps = [
+    ":hello_world",
+    ":player_test",
+    "opengl_test:all_examples",
+  ]
+}
