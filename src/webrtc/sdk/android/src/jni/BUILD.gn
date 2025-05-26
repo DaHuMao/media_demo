@@ -1,0 +1,59 @@
+import("../../webrtc.gni")
+rtc_library("internal_jni") {
+  sources = [
+    "src/jni/jvm.cc",
+    "src/jni/jvm.h",
+  ]
+
+  deps = [
+    "../../rtc_base:checks",
+    "//sdk/android/native_api/jni_zero",
+  ]
+}
+  rtc_library("logging_jni") {
+    visibility = [ "*" ]
+    sources = [
+      "src/jni/logging/log_sink.cc",
+      "src/jni/logging/log_sink.h",
+    ]
+
+    deps = [
+      ":base_jni",
+      ":native_api_jni",
+      "../../rtc_base:logging",
+      "//third_party/abseil-cpp/absl/strings:string_view",
+    ]
+  }
+  rtc_library("base_jni") {
+    visibility = [ "*" ]
+    sources = [
+      "src/jni/android_histogram.cc",
+      "src/jni/jni_common.cc",
+      "src/jni/jni_helpers.cc",
+      "src/jni/jni_helpers.h",
+      "src/jni/pc/logging.cc",
+      "src/jni/pc/video.h",
+      "src/jni/scoped_java_ref_counted.cc",
+      "src/jni/scoped_java_ref_counted.h",
+    ]
+
+    deps = [
+      ":internal_jni",
+      ":native_api_jni",
+      "../../api:field_trials_view",
+      "../../api:scoped_refptr",
+      "../../api:sequence_checker",
+      "../../api/task_queue:pending_task_safety_flag",
+      "../../rtc_base:checks",
+      "../../rtc_base:ip_address",
+      "../../rtc_base:logging",
+      "../../rtc_base:macromagic",
+      "../../rtc_base:refcount",
+      "../../rtc_base:stringutils",
+      "../../rtc_base:threading",
+      "../../system_wrappers:field_trial",
+      "../../system_wrappers:metrics",
+      "//third_party/abseil-cpp/absl/strings:string_view",
+      "//sdk/android/native_api/jni_zero",
+    ]
+  }

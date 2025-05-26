@@ -323,6 +323,8 @@ declare_args() {
 
   # Set this to true to disable webrtc metrics.
   rtc_disable_metrics = false
+
+  enable_java_templates = false
 }
 
 declare_args() {
@@ -1198,7 +1200,7 @@ if (is_mac || is_ios) {
   }
 }
 
-if (is_android) {
+if (is_android && enable_java_templates) {
   template("rtc_android_library") {
     android_library(target_name) {
       forward_variables_from(invoker,

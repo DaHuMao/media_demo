@@ -1,0 +1,246 @@
+import("../../webrtc.gni")
+rtc_source_set("jni_tools") {
+  sources = [
+    "src/jni/jni_tool/jni_help_tool.h",
+    "src/jni/jni_tool/jni_help_tool.cc",
+    "src/jni/jni_tool/jni_help_define.h",
+    "src/jni/jni_tool/jni_help_define.cc",
+  ]
+}
+
+rtc_source_set("jni_zero") {
+  sources = [
+    "native_api/jni_zero/java_refs.cc",
+    "native_api/jni_zero/java_refs.h",
+    "native_api/jni_zero/jni_export.h",
+    "native_api/jni_zero/logging.cc",
+    "native_api/jni_zero/logging.h",
+    "native_api/jni_zero/jni_zero.cc",
+    "native_api/jni_zero/default_conversions.cc",
+    "native_api/jni_zero/common_apis.cc",
+    "native_api/jni_zero/common_apis.h",
+  ]
+  cflags_cc = [
+    "-Wno-exit-time-destructors",
+     "-Wno-global-constructors",
+  ]
+}
+
+rtc_library("native_api_stacktrace") {
+  visibility = [ "*" ]
+  sources = [
+    "native_api/stacktrace/stacktrace.cc",
+    "native_api/stacktrace/stacktrace.h",
+  ]
+
+  deps = [
+    "../../rtc_base:criticalsection",
+    "../../rtc_base:logging",
+    "../../rtc_base:stringutils",
+    "../../rtc_base/synchronization:mutex",
+    "//third_party/abseil-cpp/absl/base:core_headers",
+  ]
+}
+rtc_library("native_api_base") {
+  visibility = [ "*" ]
+  sources = [
+    "native_api/base/init.cc",
+    "native_api/base/init.h",
+  ]
+
+  deps = [
+    ":base_jni",
+    ":native_api_jni",
+    "../../rtc_base:checks",
+  ]
+}
+rtc_library("internal_jni") {
+  sources = [
+    "src/jni/jvm.cc",
+    "src/jni/jvm.h",
+  ]
+
+  deps = [
+    "../../rtc_base:checks",
+    ":jni_zero",
+  ]
+}
+
+rtc_library("native_api_audio_device_module") {
+  visibility = [ "*" ]
+
+  sources = [
+    "native_api/audio_device_module/audio_device_android.cc",
+    "native_api/audio_device_module/audio_device_android.h",
+  ]
+
+  deps = [
+    ":base_jni",
+    ":internal_jni",
+    ":java_audio_device_module",
+    ":native_api_jni",
+    ":opensles_audio_device_module",
+    "../../api:scoped_refptr",
+    "../../api/audio:audio_device",
+    "../../rtc_base:checks",
+    "../../rtc_base:logging",
+    "../../rtc_base:refcount",
+    "../../system_wrappers",
+    "../../system_wrappers:metrics",
+    ":jni_zero",
+  ]
+  if (rtc_enable_android_aaudio) {
+    deps += [ ":aaudio_audio_device_module" ]
+  }
+}
+
+rtc_library("native_api_jni") {
+  visibility = [ "*" ]
+  sources = [
+    "native_api/jni/application_context_provider.cc",
+    "native_api/jni/class_loader.cc",
+    "native_api/jni/java_types.cc",
+    "native_api/jni/jvm.cc",
+    "src/jni/jni_generator_helper.h",
+  ]
+
+  public = [
+    "native_api/jni/application_context_provider.h",
+    "native_api/jni/class_loader.h",
+    "native_api/jni/java_types.h",
+    "native_api/jni/jni_int_wrapper.h",
+    "native_api/jni/jvm.h",
+    "native_api/jni/scoped_java_ref.h",
+  ]
+
+  deps = [
+    ":internal_jni",
+    "../../api:array_view",
+    "../../api:sequence_checker",
+    "../../rtc_base:checks",
+    ":jni_zero",
+  ]
+}
+
+rtc_library("logging_jni") {
+  visibility = [ "*" ]
+  sources = [
+    "src/jni/logging/log_sink.cc",
+    "src/jni/logging/log_sink.h",
+  ]
+
+  deps = [
+    ":base_jni",
+    ":native_api_jni",
+    "../../rtc_base:logging",
+    "//third_party/abseil-cpp/absl/strings:string_view",
+  ]
+}
+
+rtc_library("base_jni") {
+  visibility = [ "*" ]
+  sources = [
+    "src/jni/android_histogram.cc",
+    "src/jni/jni_common.cc",
+    "src/jni/jni_helpers.cc",
+    "src/jni/jni_helpers.h",
+    "src/jni/pc/logging.cc",
+    "src/jni/pc/video.h",
+    "src/jni/scoped_java_ref_counted.cc",
+    "src/jni/scoped_java_ref_counted.h",
+  ]
+
+  deps = [
+    ":internal_jni",
+    ":native_api_jni",
+    "../../api:field_trials_view",
+    "../../api:scoped_refptr",
+    "../../api:sequence_checker",
+    "../../api/task_queue:pending_task_safety_flag",
+    "../../rtc_base:checks",
+    "../../rtc_base:ip_address",
+    "../../rtc_base:logging",
+    "../../rtc_base:macromagic",
+    "../../rtc_base:refcount",
+    "../../rtc_base:stringutils",
+    "../../rtc_base:threading",
+    "../../system_wrappers:field_trial",
+    "../../system_wrappers:metrics",
+    "//third_party/abseil-cpp/absl/strings:string_view",
+    ":jni_zero",
+  ]
+}
+
+rtc_library("audio_device_module_base") {
+  visibility = [ "*" ]
+
+  sources = [
+    "src/jni/audio_device/audio_common.h",
+    "src/jni/audio_device/audio_device_module.cc",
+    "src/jni/audio_device/audio_device_module.h",
+  ]
+
+  deps = [
+    "../../api:make_ref_counted",
+    "../../api:sequence_checker",
+    "../../api/audio:audio_device",
+    "../../api/task_queue",
+    "../../api/task_queue:default_task_queue_factory",
+    "../../modules/audio_device:audio_device_buffer",
+    "../../rtc_base:checks",
+    "../../rtc_base:logging",
+    "../../system_wrappers:metrics",
+  ]
+}
+
+rtc_library("opensles_audio_device_module") {
+  visibility = [ "*" ]
+  sources = [
+    "src/jni/audio_device/opensles_common.cc",
+    "src/jni/audio_device/opensles_common.h",
+    "src/jni/audio_device/opensles_player.cc",
+    "src/jni/audio_device/opensles_player.h",
+    "src/jni/audio_device/opensles_recorder.cc",
+    "src/jni/audio_device/opensles_recorder.h",
+  ]
+  libs = [ "OpenSLES" ]
+  deps = [
+    ":audio_device_module_base",
+    ":base_jni",
+    "../../api:array_view",
+    "../../api:refcountedbase",
+    "../../api:scoped_refptr",
+    "../../api:sequence_checker",
+    "../../api/audio:audio_device",
+    "../../modules/audio_device:audio_device_buffer",
+    "../../rtc_base:checks",
+    "../../rtc_base:logging",
+    "../../rtc_base:macromagic",
+    "../../rtc_base:platform_thread",
+    "../../rtc_base:timeutils",
+  ]
+}
+
+rtc_library("java_audio_device_module") {
+  visibility = [ "*" ]
+
+  sources = [
+    "src/jni/audio_device/audio_record_jni.cc",
+    "src/jni/audio_device/audio_record_jni.h",
+    "src/jni/audio_device/audio_track_jni.cc",
+    "src/jni/audio_device/audio_track_jni.h",
+  ]
+  deps = [
+    ":audio_device_module_base",
+    "../../api:sequence_checker",
+    "../../api/audio:audio_device",
+    "../../modules/audio_device:audio_device_buffer",
+    "../../rtc_base:checks",
+    "../../rtc_base:logging",
+    "../../rtc_base:macromagic",
+    "../../rtc_base:platform_thread",
+    "../../rtc_base:timeutils",
+    "../../system_wrappers:field_trial",
+    "../../system_wrappers:metrics",
+  ]
+}

@@ -14,6 +14,7 @@
 
 #include <memory>
 
+#include "modules/utility/include/jvm_init.h"
 #include "rtc_base/checks.h"
 #include "rtc_base/logging.h"
 #include "rtc_base/platform_thread.h"
@@ -209,6 +210,17 @@ std::string JNIEnvironment::JavaToStdString(const jstring& j_string) {
   CHECK_EXCEPTION(jni_);
   return ret;
 }
+
+namespace jvm_helper {
+void InitJVM(JavaVM* env) {
+  RTC_LOG(LS_INFO) << "jvm_helper::InitJVM::ctor";
+  JVM::Initialize(env);
+}
+
+JavaVM* GetJVM() {
+  return JVM::GetInstance()->jvm();
+}
+}  // namespace jvm_helper
 
 // static
 void JVM::Initialize(JavaVM* jvm) {

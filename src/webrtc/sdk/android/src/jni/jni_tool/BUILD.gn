@@ -1,0 +1,28 @@
+import("../../../../../webrtc.gni")
+
+
+config("no_undefined_var_template") {
+  cflags_cc = [ "-Wno-undefined-var-template" ]
+}
+
+rtc_source_set("jni_tool") {
+  visibility = [ "*" ]
+  sources = [
+    "jni_help_tool.h",
+    "jni_help_tool.cc",
+    "jni_help_define.h",
+    "jni_help_define.cc",
+    "jni_call_static_member.h",
+    "jni_call_static_member.cc",
+  ]
+  cflags_cc = [
+    "-Wno-exit-time-destructors",
+     "-Wno-global-constructors",
+  ]
+  public_deps = [
+    "../../../../../rtc_base:checks",
+  ]
+  public_configs = [
+    ":no_undefined_var_template",
+  ]
+}

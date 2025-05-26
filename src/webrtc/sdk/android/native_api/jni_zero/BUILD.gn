@@ -1,0 +1,12 @@
+import("../../webrtc.gni")
+rtc_source_set("jni_zero") {
+  sources = [
+    "java_refs.cc",
+    "java_refs.h",
+    "jni_export.h",
+    "logging.cc",
+    "logging.h",
+    "jni_zero.cc",
+    "default_conversions.cc",
+  ]
+}

@@ -7,7 +7,7 @@
 # be found in the AUTHORS file in the root of the source tree.
 
 # Some non-Chromium builds don't support building java targets.
-enable_java_templates = true
+enable_java_templates = false
 
 # Don't set this variable to true when building stadalone WebRTC, it is
 # only needed to support both WebRTC standalone and Chromium builds.
