@@ -1,0 +1,20 @@
+
+import("//config.gni")
+media_source_set("ring_buffer") {
+  sources = [
+    "ring_buffer_wrapper.h",
+    "ring_buffer_wrapper.cc",
+  ]
+  deps = [
+    "${webrtc_dir}/common_audio:ring_buffer",
+    "${rtc_base_dir}:checks",
+  ]
+}
+
+media_source_set("log") {
+  sources = [
+    "log.h",
+    "log.cc",
+  ]
+}
+

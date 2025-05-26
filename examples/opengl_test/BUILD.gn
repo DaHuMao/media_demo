@@ -1,0 +1,49 @@
+import("//config.gni")
+media_source_set("common") {
+  include_dirs = [
+    ".",
+  ]
+  sources = [
+    "camera.h",
+    "camera.cc",
+    "windows.h",
+    "windows.cc",
+    "picture_loader.h",
+    "picture_loader.cc",
+    "render.h",
+    "render.cc",
+    "stb_image/stb_image.cc"
+  ]
+  public_deps = [
+    "${work_dir}/core/video_render/opengl:opengl",
+    "${work_dir}/core/video_common:video_frame",
+  ]
+  public_configs = [
+    "//third_party/glfw:glfw_config",
+    "//third_party/glew:glew_config",
+  ]
+}
+media_demo_executable("light_test") {
+  frameworks = [
+    "OpenGL.framework",
+    "GLUT.framework",
+  ]
+  include_dirs = [
+    ".",
+  ]
+  sources = [
+    "light_test.cc",
+  ]
+  deps = [
+    ":common",
+  ]
+  configs = [
+    "//third_party/glfw:glfw_ldflags_config",
+  ]
+}
+
+group("all_examples") {
+  deps = [
+    ":light_test",
+  ]
+}

@@ -1,0 +1,31 @@
+import("//config.gni")
+
+media_source_set("audio") {
+  sources = [
+    "audio_frame_ffmpeg.h",
+    "audio_frame_ffmpeg.cc",
+    "audio_format_ffmpeg_convert.h",
+    "audio_format_ffmpeg_convert.cc"
+  ]
+  deps = [
+    "../ffmpeg:ffmpeg_util",
+  ]
+  public_deps = [
+    "${rtc_base_dir}:checks",
+  ]
+}
+
+media_source_set("video") {
+  sources = [
+    "video_frame_ffmpeg.h",
+    "video_frame_ffmpeg.cc",
+    "video_format_converter.h",
+    "video_format_converter.cc",
+  ]
+  deps = [
+    "../ffmpeg:ffmpeg_util",
+  ]
+  public_deps = [
+    "${rtc_base_dir}:checks",
+  ]
+}

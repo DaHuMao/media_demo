@@ -1,0 +1,18 @@
+
+import("//config.gni")
+media_source_set("decoder_ffmpeg") {
+  sources = [
+    "decoder_ffmpeg.h",
+    "decoder_ffmpeg.cc",
+    "reader_ffmpeg.h",
+    "reader_ffmpeg.cc",
+  ]
+  public_configs = [
+    "//third_party/ffmpeg:ffmpeg_include_config",
+  ]
+  deps = [
+    "${rtc_base_dir}:checks",
+    "../ffmpeg:ffmpeg_util",
+    "//third_party/ffmpeg",
+  ]
+}

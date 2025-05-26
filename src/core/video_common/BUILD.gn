@@ -1,0 +1,39 @@
+import("//config.gni")
+media_source_set("video_frame") {
+  sources = [
+    "video_format_define.h",
+    "video_format_info.h",
+    "video_format_info.cc",
+    "video_format_util.h",
+    "video_format_util.cc",
+    "video_frame.h",
+    "video_frame.cc",
+  ]
+  deps = [
+    "${rtc_base_dir}:checks",
+    "//third_party/ffmpeg",
+  ]
+  public_configs = [
+    "//third_party/ffmpeg:ffmpeg_include_config",
+  ]
+}
+
+media_source_set("video_convert") {
+  sources = [
+    "video_convert.h",
+    "video_convert.cc",
+  ]
+  deps = [
+    ":video_frame",
+    "${rtc_base_dir}:checks",
+    "//third_party/libyuv:libyuv",
+    "//third_party/ffmpeg",
+  ]
+}
+
+media_source_set("video_core") {
+  deps = [
+    ":video_frame",
+    ":video_convert",
+  ]
+}

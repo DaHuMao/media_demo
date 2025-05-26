@@ -1,0 +1,42 @@
+import("//config.gni")
+
+media_source_set("opengl") {
+  sources = [
+    "gl_util.h",
+    "gl_util.cc",
+    "gl_shader.h",
+    "shader.h",
+    "shader.cc",
+    "gl_texture.h",
+    "gl_texture.cc",
+    "vertex_array.h",
+    "vertex_array.cc",
+    "vertex_index_buffer.h",
+    "vertex_index_buffer.cc",
+    "vertex_buffer.h",
+    "vertex_buffer.cc",
+    "vertex_buffer_layout.h",
+    "vertex_buffer_layout.cc",
+    "mat_util.h",
+    "mat_util.cc",
+  ]
+  deps = [
+    "${work_dir}/util:log",
+  ]
+  public_deps = [
+    "${rtc_base_dir}:checks",
+  ]
+  public_configs = [
+    "//third_party/glew:glew_config",
+  ]
+}
+
+media_source_set("glfw_windows") {
+  sources = [
+    "glfw_windows.h",
+    "glfw_windows.cc",
+  ]
+  configs = [
+    "//third_party/glfw:glfw_config",
+  ]
+}

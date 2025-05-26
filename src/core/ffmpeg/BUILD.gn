@@ -1,0 +1,20 @@
+import("//config.gni")
+
+media_source_set("ffmpeg_util") {
+  sources = [
+    "ffmpeg_util.h",
+    "ffmpeg_util.cc",
+    "av_frame_wrapper.h",
+    "av_frame_wrapper.cc",
+    "av_packet_wrapper.h",
+    "av_packet_wrapper.cc",
+  ]
+  deps = [
+    "${work_dir}/util:log",
+    "${rtc_base_dir}:checks",
+    "//third_party/ffmpeg",
+  ]
+  public_configs = [
+    "//third_party/ffmpeg:ffmpeg_include_config",
+  ]
+}

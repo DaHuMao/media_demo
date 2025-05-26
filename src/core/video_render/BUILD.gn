@@ -1,0 +1,56 @@
+import("//config.gni")
+media_source_set("video_render_factory") {
+  sources = [
+    "video_renderer.h",
+    "video_render_factory.h",
+    "video_render_factory.cc",
+  ]
+  deps = [
+    ":video_render",
+  ]
+}
+
+if (is_mac) {
+media_source_set("video_render") {
+  sources = [
+    "video_render_impl.h",
+    "video_render_impl.cc",
+  ]
+
+  deps = [
+    "${work_dir}/core/adapter:video",
+    "${work_dir}/core/video_common:video_frame",
+    "${work_dir}/core/video_common:video_convert",
+    "${work_dir}/core/codec:decoder_ffmpeg",
+    "${work_dir}/core/video_render/opengl:opengl",
+  ]
+
+  public_deps = [
+    "${webrtc_dir}/api:sequence_checker",
+  ]
+
+  frameworks = [
+    "OpenGL.framework",
+    "GLUT.framework",
+  ]
+  public_configs = [
+    "//third_party/glfw:glfw_config",
+    "//third_party/glew:glew_config",
+  ]
+}
+} else if (is_android) {
+media_source_set("video_render") {
+  sources = [
+    "video_render_jni.h",
+    "video_render_jni.cc",
+    "java_video_object_jni.cc",
+  ]
+  deps = [
+    "${work_dir}/core/video_common:video_frame",
+    "${webrtc_dir}/sdk/android/src/jni/jni_tool",
+  ]
+  public_deps = [
+    "${webrtc_dir}/api:sequence_checker",
+  ]
+}
+}

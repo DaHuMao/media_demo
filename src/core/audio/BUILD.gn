@@ -1,0 +1,96 @@
+import("//config.gni")
+media_source_set("audio_frame") {
+  sources = [
+    "audio_format_define.h",
+    "audio_format_define.cc",
+    "audio_format_util.h",
+    "audio_format_util.cc",
+    "audio_frame.h",
+    "audio_frame.cc",
+    "audio_buffer_common_reader.h",
+    "audio_buffer_common_reader.cc",
+    "audio_ring_buffer_io_impl.h",
+    "audio_ring_buffer_io_impl.cc",
+  ]
+  deps = [
+    "//src/util:ring_buffer",
+    "//src/util:log",
+  ]
+  public_deps = [
+    "${rtc_base_dir}:checks",
+  ]
+}
+
+media_source_set("audio_frame_util") {
+  sources = [
+    "audio_frame_util.h",
+    "audio_frame_util.cc",
+    "webrtc_audio_frame_util.h",
+    "webrtc_audio_frame_util.cc",
+  ]
+  deps = [
+    ":audio_frame",
+    "${webrtc_dir}/common_audio:audio_util",
+    "${webrtc_dir}/api/audio:audio_frame_api",
+  ]
+}
+
+media_source_set("audio_converter") {
+  sources = [
+    "audio_converter.h",
+    "audio_converter.cc",
+    "audio_convert_wrapper.h",
+    "audio_convert_wrapper.cc",
+  ]
+  deps = [
+    ":audio_frame",
+    "//third_party/ffmpeg",
+  ]
+}
+
+media_source_set("resample_io") {
+  sources = [
+    "resample_io.h",
+    "resample_io.cc",
+  ]
+  deps = [
+    ":audio_frame",
+    ":audio_converter",
+  ]
+}
+
+media_source_set("audio_mixer") {
+  sources = [
+    "audio_mixer_impl.h",
+    "audio_mixer_impl.cc",
+  ]
+  deps = [
+    ":resample_io",
+    ":audio_frame_util",
+    "${webrtc_dir}/modules/audio_processing/agc2:fixed_digital",
+  ]
+}
+
+media_source_set("audio_device") {
+  sources = [
+    "audio_device_wrapper_impl.h",
+    "audio_device_wrapper_impl.cc",
+  ]
+  deps = [
+    ":audio_mixer",
+    "${rtc_base_dir}:threading",
+    "${webrtc_dir}/modules/audio_device:audio_device",
+    "${webrtc_dir}/api/task_queue:default_task_queue_factory",
+  ]
+}
+
+media_source_set("core_audio") {
+  deps = [
+    ":audio_device",
+    ":audio_mixer",
+    ":audio_frame",
+    ":audio_frame_util",
+    ":audio_converter",
+    ":resample_io",
+  ]
+}

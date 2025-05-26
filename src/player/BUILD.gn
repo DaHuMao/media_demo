@@ -1,0 +1,37 @@
+import("//config.gni")
+media_source_set("player") {
+  sources = [
+    "player.h",
+    "player_impl.h",
+    "player_impl.cc",
+    "packet_info.h",
+    "packet_info.cc",
+    "packet_queue.h",
+    "packet_queue.cc",
+    "av_packet_queue.h",
+    "av_packet_queue.cc",
+    "decode_to_render.h",
+    "decode_to_render.cc",
+    "audio_decode_to_render.h",
+    "audio_decode_to_render.cc",
+    "video_decode_to_render.h",
+    "video_decode_to_render.cc",
+    "audio_renderer.h",
+    "audio_render_impl.h",
+    "audio_render_impl.cc",
+    "player_timer.h",
+    "player_timer.cc",
+  ]
+  deps = [
+    "${work_dir}/core/video_render:video_render_factory",
+    "${work_dir}/core/adapter:audio",
+    "${work_dir}/core/adapter:video",
+    "${work_dir}/core/video_common:video_frame",
+    "${work_dir}/core/audio:audio_frame",
+    "${work_dir}/core/audio:resample_io",
+    "${work_dir}/core/audio:audio_device",
+    "${work_dir}/core/codec:decoder_ffmpeg",
+    "${webrtc_dir}/api/task_queue:task_queue",
+    "${rtc_base_dir}:threading",
+  ]
+}

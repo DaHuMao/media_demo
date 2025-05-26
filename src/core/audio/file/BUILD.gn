@@ -1,0 +1,18 @@
+import("//config.gni")
+media_source_set("file_io") {
+  sources = [
+    "audio_io_define.h",
+    "file_io.h",
+    "file_io.cc",
+    "audio_file_header.h",
+    "audio_file_header.cc",
+    "wav_file_header.h",
+    "wav_file_header.cc",
+    "file_io_creator.h",
+    "file_io_creator.cc",
+  ]
+  deps = [
+    "../:audio_frame",
+    "${webrtc_dir}/common_audio:wav_header",
+  ]
+}
